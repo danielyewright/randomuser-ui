@@ -8,12 +8,18 @@
                 <div class="form-group">
                     <label for="numberOfUsers" class="control-label">Number of Users</label>
                     <br>
-                    <select value.bind="count" class="form-control" style="margin-right: 5px;">
+                    <select id="numberOfUsers" value.bind="count" class="form-control" style="margin-right: 5px;">
                         <option value="">-</option>
                         <option model.bind="25">25</option>
                         <option model.bind="50">50</option>
                     </select>
                     <button click.delegate="activate(count)" class="btn btn-default">Get Users</button>
+                </div>
+            </div>
+            <div class="col-sm-12" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label for="output" class="control-label">Output</label>
+                    <textarea cols="30" rows="15" class="form-control" value="${apiValue}" readonly></textarea>
                 </div>
             </div>
         </div>

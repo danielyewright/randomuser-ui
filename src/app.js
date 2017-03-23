@@ -7,10 +7,9 @@ export class App {
         this.userApi = userApi;
         this._users = [];
         this.count = 0;
-        this.message = 'Hello World!';
     }
 
-    activate(count) { 
+    activate(count) {
         return this.userApi.getAll(count)
             .then(users => this._users = users);
     }

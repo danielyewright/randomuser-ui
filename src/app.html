@@ -20,7 +20,7 @@
                             <input id="count" type="number" value.bind="count" class="form-control">
                         </div>
                         <div class="col-sm-12">
-                            <span if.bind="count > 5000" class="text-danger">Please enter a value less than or equal to 5,000.</span>
+                            <span if.bind="count > 5000" class="text-danger">Please enter a value less than or equal to <strong>5,000<strong>.</span>
                         </div>
                     </div>
                 </div>
@@ -42,10 +42,6 @@
                 <div class="form-group">
                     <label for="output" class="control-label">Output </label>
                     <span class="help-block pull-right">You can copy the results for use</span>
-                    <textarea id="output" cols="30" rows="15" class="form-control" value.bind="output" readonly></textarea>
-                    <form role="form">
-                        <div textcontent.bind="textContentValue" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae molestiae, distinctio aut consequatur unde, quasi, sunt deleniti vel et quis dicta velit! Perspiciatis eius labore non, dolorum, dolorem officiis doloribus!</div>
-                    </form>
                 </div>
             </div>
         </div>

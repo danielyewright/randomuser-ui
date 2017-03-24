@@ -8,7 +8,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "au run --watch"
+    "start": "au run --watch",
+    "build:dev": "au build --env dev",
+    "build:prod": "au build --env prod"
   },
   "dependencies": {
     "aurelia-animator-css": "^1.0.1",

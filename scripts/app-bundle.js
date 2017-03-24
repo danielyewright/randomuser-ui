@@ -19,6 +19,7 @@ define('app',['exports', 'aurelia-framework', 'api/user'], function (exports, _a
             _classCallCheck(this, App);
 
             this.nationalities = [{ value: 'au', name: 'AU' }, { value: 'br', name: 'BR' }, { value: 'ca', name: 'CA' }, { value: 'ch', name: 'CH' }, { value: 'de', name: 'DE' }, { value: 'dk', name: 'DK' }, { value: 'es', name: 'ES' }, { value: 'fi', name: 'FI' }, { value: 'fr', name: 'FR' }, { value: 'gb', name: 'GB' }, { value: 'ie', name: 'IE' }, { value: 'ir', name: 'IR' }, { value: 'nl', name: 'NL' }, { value: 'nz', name: 'NZ' }, { value: 'tr', name: 'TR' }, { value: 'us', name: 'US' }];
+            this.isSuccess = false;
 
             this.userApi = userApi;
             this._users = [];
@@ -27,16 +28,18 @@ define('app',['exports', 'aurelia-framework', 'api/user'], function (exports, _a
             this.output = '';
         }
 
-        App.prototype.activate = function activate() {};
-
         App.prototype.getUsers = function getUsers(count, nat) {
             var _this = this;
 
-            return this.userApi.getAll(count, nat).then(function (users) {
-                return _this._users = users;
-            }).then(function (users) {
-                _this.output = JSON.stringify(users.results);
-            });
+            if (this.count > 5000) {
+                return false;
+            } else {
+                return this.userApi.getAll(count, nat).then(function (users) {
+                    return _this._users = users;
+                }).then(function (users) {
+                    _this.output = JSON.stringify(users.results);
+                });
+            }
         };
 
         App.prototype.get = function get() {
@@ -223,6 +226,6 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><div class=\"row\"><div class=\"col-sm-2\"><div class=\"form-group\"><label class=\"control-label\">Number of Results</label><br><select value.bind=\"count\" class=\"form-control\"><option value=\"\"></option><option value=\"25\">25</option><option value=\"50\">50</option><option value=\"100\">100</option></select></div><div class=\"form-group\"><label class=\"control-label\">Nationality</label><br><select value.bind=\"nat\" class=\"form-control\"><option value=\"\"></option><option repeat.for=\"option of nationalities\" model.bind=\"option.value\">${option.name}</option></select></div><button click.delegate=\"getUsers(count, nat)\" class=\"btn btn-default\">Get Users</button></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><textarea id=\"output\" cols=\"30\" rows=\"15\" class=\"form-control\" value.bind=\"output\" readonly=\"readonly\"></textarea></div></div></div></div></template>"; });
-define('text!style.css', ['module'], function(module) { module.exports = "body {\n    background-color: #ececec;\n    margin: 1% auto;\n}\n\n.form-control[readonly] {\n    background-color: #fff;\n}\n\ntextarea.form-control {\n    overflow: auto;\n}"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><div class=\"row\"><div class=\"col-sm-6\"><div class=\"form-group\"><label class=\"control-label\">Number of Results</label><br><span class=\"help-block\">Random User Generator allows you to fetch up to <strong>5,000</strong> generated users in one request</span><div class=\"row\"><div class=\"col-sm-3\"><input id=\"count\" type=\"number\" value.bind=\"count\" class=\"form-control\"></div><div class=\"col-sm-12\"><span if.bind=\"count > 5000\" class=\"text-danger\">Please enter a value less than or equal to 5,000.</span></div></div></div><div class=\"form-group\"><label class=\"control-label\">Nationality</label><br><div class=\"row\"><div class=\"col-sm-3\"><select value.bind=\"nat\" class=\"form-control\"><option value=\"\"></option><option repeat.for=\"option of nationalities\" model.bind=\"option.value\">${option.name}</option></select></div></div></div><button click.delegate=\"getUsers(count, nat)\" class=\"btn btn-default\" disabled.bind=\"count > 5000\">Generate <span if.bind=\"count\">(${count})</span> users</button></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><span class=\"help-block pull-right\">You can copy the results for use</span><textarea id=\"output\" cols=\"30\" rows=\"15\" class=\"form-control\" value.bind=\"output\" readonly=\"readonly\"></textarea><form role=\"form\"><div textcontent.bind=\"textContentValue\" contenteditable=\"true\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae molestiae, distinctio aut consequatur unde, quasi, sunt deleniti vel et quis dicta velit! Perspiciatis eius labore non, dolorum, dolorem officiis doloribus!</div></form></div></div></div></div></template>"; });
+define('text!style.css', ['module'], function(module) { module.exports = "body {\n    background-color: #efefef;\n    margin: 1% auto;\n}\n\n.form-control[readonly] {\n    background-color: #fff;\n}\n\ntextarea.form-control {\n    overflow: auto;\n}\n\n.val-error {\n    border-color: red;\n    box-shadow: inset 0 1px 1px red, 0 1px 3px 2px red;\n}"; });
 //# sourceMappingURL=app-bundle.js.map

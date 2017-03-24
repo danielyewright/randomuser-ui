@@ -4,33 +4,48 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label class="control-label">Number of Results</label>
                     <br>
-                    <select value.bind="count" class="form-control">
+                    <!--<select value.bind="count" class="form-control">
                         <option value=""></option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
-                    </select>
+                    </select>-->
+                    <span class="help-block">Random User Generator allows you to fetch up to <strong>5,000</strong> generated users in one request</span>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input id="count" type="number" value.bind="count" class="form-control">
+                        </div>
+                        <div class="col-sm-12">
+                            <span if.bind="count > 5000" class="text-danger">Please enter a value less than or equal to 5,000.</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Nationality</label>
                     <br>
-                    <select value.bind="nat" class="form-control">
-                        <option value=""></option>
-                        <!--<option value="us">US</option>
-                        <option value="au">AU</option>-->
-                        <option repeat.for="option of nationalities" model.bind="option.value">${option.name}</option>
-                    </select>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <select value.bind="nat" class="form-control">
+                                <option value=""></option>
+                                <option repeat.for="option of nationalities" model.bind="option.value">${option.name}</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <button click.delegate="getUsers(count, nat)" class="btn btn-default">Get Users</button>
+                <button click.delegate="getUsers(count, nat)" class="btn btn-default" disabled.bind="count > 5000">Generate <span if.bind="count">(${count})</span> users</button>
             </div>
             <div class="col-sm-12" style="margin-top: 15px;">
                 <div class="form-group">
-                    <label for="output" class="control-label">Output</label>
+                    <label for="output" class="control-label">Output </label>
+                    <span class="help-block pull-right">You can copy the results for use</span>
                     <textarea id="output" cols="30" rows="15" class="form-control" value.bind="output" readonly></textarea>
+                    <form role="form">
+                        <div textcontent.bind="textContentValue" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae molestiae, distinctio aut consequatur unde, quasi, sunt deleniti vel et quis dicta velit! Perspiciatis eius labore non, dolorum, dolorem officiis doloribus!</div>
+                    </form>
                 </div>
             </div>
         </div>

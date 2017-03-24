@@ -22,6 +22,8 @@ export class App {
         { value: 'us', name: 'US' }
     ];
 
+    isSuccess = false;
+
     constructor(userApi) {
         this.userApi = userApi;
         this._users = [];
@@ -30,14 +32,19 @@ export class App {
         this.output = '';
     }
 
-    activate() { }
-
     getUsers(count, nat) {
-        return this.userApi.getAll(count, nat)
-            .then(users => this._users = users)
-            .then(users => {
-                this.output = JSON.stringify(users.results);
-            })
+        if (this.count > 5000) {
+            // Used only if 'disabled' binding is not present on button
+            // alert("Please enter a value less than or equal to 5,000.");
+            return false;
+        }
+        else {
+            return this.userApi.getAll(count, nat)
+                .then(users => this._users = users)
+                .then(users => {
+                    this.output = JSON.stringify(users.results);
+                })
+        }
     }
 
     get() {

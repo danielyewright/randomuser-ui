@@ -18,16 +18,24 @@ define('app',['exports', 'aurelia-framework', 'api/user'], function (exports, _a
         function App(userApi) {
             _classCallCheck(this, App);
 
+            this.nationalities = [{ value: 'au', name: 'AU' }, { value: 'br', name: 'BR' }, { value: 'ca', name: 'CA' }, { value: 'ch', name: 'CH' }, { value: 'de', name: 'DE' }, { value: 'dk', name: 'DK' }, { value: 'es', name: 'ES' }, { value: 'fi', name: 'FI' }, { value: 'fr', name: 'FR' }, { value: 'gb', name: 'GB' }, { value: 'ie', name: 'IE' }, { value: 'ir', name: 'IR' }, { value: 'nl', name: 'NL' }, { value: 'nz', name: 'NZ' }, { value: 'tr', name: 'TR' }, { value: 'us', name: 'US' }];
+
             this.userApi = userApi;
             this._users = [];
             this.count = 0;
+            this.nat = '';
+            this.output = '';
         }
 
-        App.prototype.activate = function activate(count) {
+        App.prototype.activate = function activate() {};
+
+        App.prototype.getUsers = function getUsers(count, nat) {
             var _this = this;
 
-            return this.userApi.getAll(count).then(function (users) {
+            return this.userApi.getAll(count, nat).then(function (users) {
                 return _this._users = users;
+            }).then(function (users) {
+                _this.output = JSON.stringify(users.results);
             });
         };
 
@@ -199,8 +207,8 @@ define('api/user',['exports', 'aurelia-framework', './api'], function (exports, 
             this.api = api;
         }
 
-        UserApi.prototype.getAll = function getAll(count) {
-            return this.api.get('/?nat=us&results=' + count);
+        UserApi.prototype.getAll = function getAll(count, nat) {
+            return this.api.get('/?results=' + count + '&nat=' + nat);
         };
 
         return UserApi;
@@ -215,6 +223,6 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><div class=\"row\"><div class=\"col-sm-3 form-inline\"><div class=\"form-group\"><label for=\"numberOfUsers\" class=\"control-label\">Number of Users</label><br><select id=\"numberOfUsers\" value.bind=\"count\" class=\"form-control\" style=\"margin-right:5px\"><option value=\"\">-</option><option model.bind=\"25\">25</option><option model.bind=\"50\">50</option></select><button click.delegate=\"activate(count)\" class=\"btn btn-default\">Get Users</button></div></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><textarea cols=\"30\" rows=\"15\" class=\"form-control\" value=\"${apiValue}\" readonly=\"readonly\"></textarea></div></div></div></div></template>"; });
-define('text!style.css', ['module'], function(module) { module.exports = "body {\r\n    background-color: #ececec;\r\n    margin: 1% auto;\r\n}\r\n\r\n.form-control[readonly] {\r\n    background-color: #fff;\r\n}\r\n\r\ntextarea.form-control {\r\n    overflow: auto;\r\n}"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><div class=\"row\"><div class=\"col-sm-2\"><div class=\"form-group\"><label class=\"control-label\">Number of Results</label><br><select value.bind=\"count\" class=\"form-control\"><option value=\"\"></option><option value=\"25\">25</option><option value=\"50\">50</option><option value=\"100\">100</option></select></div><div class=\"form-group\"><label class=\"control-label\">Nationality</label><br><select value.bind=\"nat\" class=\"form-control\"><option value=\"\"></option><option repeat.for=\"option of nationalities\" model.bind=\"option.value\">${option.name}</option></select></div><button click.delegate=\"getUsers(count, nat)\" class=\"btn btn-default\">Get Users</button></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><textarea id=\"output\" cols=\"30\" rows=\"15\" class=\"form-control\" value.bind=\"output\" readonly=\"readonly\"></textarea></div></div></div></div></template>"; });
+define('text!style.css', ['module'], function(module) { module.exports = "body {\n    background-color: #ececec;\n    margin: 1% auto;\n}\n\n.form-control[readonly] {\n    background-color: #fff;\n}\n\ntextarea.form-control {\n    overflow: auto;\n}"; });
 //# sourceMappingURL=app-bundle.js.map

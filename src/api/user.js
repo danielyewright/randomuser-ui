@@ -7,8 +7,8 @@ export class UserApi {
         this.api = api;
     }
 
-    getAll(count) {
-        // return this.api.get("/?nat=us");
-        return this.api.get(`/?nat=us&results=${count}`);
+    // TODO: Add extra params for controlling returned data
+    getAll(count, nat) {
+        return this.api.get(`/?results=${count}&nat=${nat}`);
     }
 }

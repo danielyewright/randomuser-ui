@@ -19,13 +19,13 @@ define('app',['exports', 'aurelia-framework', 'api/user'], function (exports, _a
             _classCallCheck(this, App);
 
             this.nationalities = [{ value: 'au', name: 'AU' }, { value: 'br', name: 'BR' }, { value: 'ca', name: 'CA' }, { value: 'ch', name: 'CH' }, { value: 'de', name: 'DE' }, { value: 'dk', name: 'DK' }, { value: 'es', name: 'ES' }, { value: 'fi', name: 'FI' }, { value: 'fr', name: 'FR' }, { value: 'gb', name: 'GB' }, { value: 'ie', name: 'IE' }, { value: 'ir', name: 'IR' }, { value: 'nl', name: 'NL' }, { value: 'nz', name: 'NZ' }, { value: 'tr', name: 'TR' }, { value: 'us', name: 'US' }];
-            this.isSuccess = false;
 
             this.userApi = userApi;
             this._users = [];
             this.count = 0;
             this.nat = '';
             this.output = '';
+            this.busy = false;
         }
 
         App.prototype.getUsers = function getUsers(count, nat) {
@@ -36,8 +36,11 @@ define('app',['exports', 'aurelia-framework', 'api/user'], function (exports, _a
             } else {
                 return this.userApi.getAll(count, nat).then(function (users) {
                     return _this._users = users;
-                }).then(function (users) {
+                }, this.busy = true).then(function (users) {
                     _this.output = JSON.stringify(users.results);
+                    _this.busy = false;
+                    _this.count = 0;
+                    _this.nat = '';
                 });
             }
         };
@@ -226,6 +229,6 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><h1>Random User Generator UI</h1><br><div class=\"row\"><div class=\"col-sm-6\"><div class=\"form-group\"><label class=\"control-label\">Number of Results</label><br><span class=\"help-block\">Random User Generator allows you to fetch up to <strong>5,000</strong> generated users in one request</span><div class=\"row\"><div class=\"col-sm-3\"><input id=\"count\" type=\"number\" value.bind=\"count\" class=\"form-control\"></div><div class=\"col-sm-12\"><span if.bind=\"count > 5000\" class=\"text-danger\">Please enter a value less than or equal to <strong>5,000<strong>.</strong></strong></span></div></div></div><div class=\"form-group\"><label class=\"control-label\">Nationality</label><br><div class=\"row\"><div class=\"col-sm-3\"><select value.bind=\"nat\" class=\"form-control\"><option value=\"\"></option><option repeat.for=\"option of nationalities\" model.bind=\"option.value\">${option.name}</option></select></div></div></div><button click.delegate=\"getUsers(count, nat)\" class=\"btn btn-default\" disabled.bind=\"count > 5000\">Generate <span if.bind=\"count\">(${count})</span> users</button></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><span class=\"help-block pull-right\">You can copy the results for use</span><textarea value.bind=\"output\" cols=\"30\" rows=\"15\" class=\"form-control\" readonly=\"readonly\"></textarea></div></div></div></div></template>"; });
-define('text!style.css', ['module'], function(module) { module.exports = "body {\n    background-color: #efefef;\n    margin: 1% auto;\n}\n\n.form-control[readonly] {\n    background-color: #fff;\n}\n\ntextarea.form-control {\n    overflow: auto;\n}\n\n.val-error {\n    border-color: red;\n    box-shadow: inset 0 1px 1px red, 0 1px 3px 2px red;\n}"; });
+define('text!style.css', ['module'], function(module) { module.exports = "body {\r\n    background-color: #efefef;\r\n    margin: 1% auto;\r\n}\r\n\r\n.form-control[readonly] {\r\n    background-color: #fff;\r\n}\r\n\r\ntextarea.form-control {\r\n    overflow: auto;\r\n}\r\n\r\n.val-error {\r\n    border: 1px solid red;\r\n    box-shadow: inset 0 1px 1px red, 0 1px 3px 2px red;\r\n    /* Added these classes due to 'class.bind' overriding initial class */\r\n    display: block;\r\n    width: 100%;\r\n    height: 34px;\r\n    padding: 6px 12px;\r\n    font-size: 14px;\r\n    line-height: 1.42857143;\r\n    color: #555;\r\n    background-color: #fff;\r\n    background-image: none;\r\n    outline: none;\r\n}"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"bootstrap/css/bootstrap.css\"></require><require from=\"font-awesome/css/font-awesome.css\"></require><require from=\"./style.css\"></require><div class=\"container\"><h1>Random User Generator UI</h1><br><div class=\"row\"><div class=\"col-sm-6\"><div class=\"form-group\"><label class=\"control-label\">Number of Results</label><br><span class=\"help-block\">Random User Generator allows you to fetch up to <strong>5,000</strong> generated users in one request</span><div class=\"row\"><div class=\"col-sm-3\"><input id=\"count\" type=\"number\" value.bind=\"count\" class=\"${count > 5000 ? 'val-error' : 'form-control'}\"></div><div class=\"col-sm-12\"><span if.bind=\"count > 5000\" class=\"text-danger\">Please enter a value less than or equal to <strong>5,000<strong>.</strong></strong></span></div></div></div><div class=\"form-group\"><label class=\"control-label\">Nationality</label><br><div class=\"row\"><div class=\"col-sm-3\"><select value.bind=\"nat\" class=\"form-control\"><option value=\"\"></option><option repeat.for=\"option of nationalities\" model.bind=\"option.value\">${option.name}</option></select></div></div></div><button click.delegate=\"getUsers(count, nat)\" class=\"btn btn-default\" disabled.bind=\"count > 5000\">Generate <span if.bind=\"count > 0\">(${count})</span> users <span show.bind=\"busy\" class=\"fa fa-spinner fa-spin\"></span></button></div><div class=\"col-sm-12\" style=\"margin-top:15px\"><div class=\"form-group\"><label for=\"output\" class=\"control-label\">Output</label><span class=\"help-block pull-right\">You can copy the results for use</span><textarea value.bind=\"output\" cols=\"30\" rows=\"20\" class=\"form-control\" readonly=\"readonly\"></textarea></div></div></div></div></template>"; });
 //# sourceMappingURL=app-bundle.js.map

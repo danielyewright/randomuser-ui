@@ -147,6 +147,14 @@
             ]
           },
           {
+            "name": "font-awesome",
+            "path": "../node_modules/font-awesome/",
+            "main": "",
+            "resources": [
+              "css/font-awesome.css"
+            ]
+          },
+          {
             "name": "aurelia-fetch-client",
             "main": "aurelia-fetch-client",
             "path": "../node_modules/aurelia-fetch-client/dist/amd",
@@ -159,7 +167,12 @@
     "copyFiles": {
       "node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2": "bootstrap/fonts",
       "node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff": "bootstrap/fonts",
-      "node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf": "bootstrap/fonts"
+      "node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf": "bootstrap/fonts",
+      "node_modules/font-awesome/fonts/fontawesome-webfont.woff2": "font-awesome/fonts",
+      "node_modules/font-awesome/fonts/fontawesome-webfont.woff": "font-awesome/fonts",
+      "node_modules/font-awesome/fonts/fontawesome-webfont.ttf": "font-awesome/fonts",
+      "node_modules/font-awesome/fonts/fontawesome-webfont.eot": "font-awesome/fonts",
+      "node_modules/font-awesome/fonts/fontawesome-webfont.svg": "font-awesome/fonts"
     }
   }
 }

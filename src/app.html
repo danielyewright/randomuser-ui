@@ -1,5 +1,6 @@
 <template>
     <require from="bootstrap/css/bootstrap.css"></require>
+    <require from="font-awesome/css/font-awesome.css"></require>
     <require from="./style.css"></require>
 
     <div class="container">
@@ -10,16 +11,10 @@
                 <div class="form-group">
                     <label class="control-label">Number of Results</label>
                     <br>
-                    <!--<select value.bind="count" class="form-control">
-                        <option value=""></option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>-->
                     <span class="help-block">Random User Generator allows you to fetch up to <strong>5,000</strong> generated users in one request</span>
                     <div class="row">
                         <div class="col-sm-3">
-                            <input id="count" type="number" value.bind="count" class="form-control">
+                            <input id="count" type="number" value.bind="count" class="${count > 5000 ? 'val-error' : 'form-control'}">
                         </div>
                         <div class="col-sm-12">
                             <span if.bind="count > 5000" class="text-danger">Please enter a value less than or equal to <strong>5,000<strong>.</span>
@@ -38,13 +33,13 @@
                         </div>
                     </div>
                 </div>
-                <button click.delegate="getUsers(count, nat)" class="btn btn-default" disabled.bind="count > 5000">Generate <span if.bind="count">(${count})</span> users</button>
+                <button click.delegate="getUsers(count, nat)" class="btn btn-default" disabled.bind="count > 5000">Generate <span if.bind="count > 0">(${count})</span> users <span show.bind="busy" class="fa fa-spinner fa-spin"></span></button>
             </div>
             <div class="col-sm-12" style="margin-top: 15px;">
                 <div class="form-group">
                     <label for="output" class="control-label">Output </label>
                     <span class="help-block pull-right">You can copy the results for use</span>
-                    <textarea value.bind="output" cols="30" rows="15" class="form-control" readonly></textarea>
+                    <textarea value.bind="output" cols="30" rows="20" class="form-control" readonly></textarea>
                 </div>
             </div>
         </div>

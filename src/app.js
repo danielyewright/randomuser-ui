@@ -22,14 +22,13 @@ export class App {
         { value: 'us', name: 'US' }
     ];
 
-    isSuccess = false;
-
     constructor(userApi) {
         this.userApi = userApi;
         this._users = [];
         this.count = 0;
         this.nat = '';
         this.output = '';
+        this.busy = false;
     }
 
     getUsers(count, nat) {
@@ -40,9 +39,12 @@ export class App {
         }
         else {
             return this.userApi.getAll(count, nat)
-                .then(users => this._users = users)
+                .then(users => this._users = users, this.busy = true)
                 .then(users => {
                     this.output = JSON.stringify(users.results);
+                    this.busy = false;
+                    this.count = 0;
+                    this.nat = '';
                 })
         }
     }
